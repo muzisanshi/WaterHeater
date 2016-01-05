@@ -146,15 +146,15 @@
 
 - (void)rightItemActionWithIsOn:(UIButton *)sender{
     sender.selected = !sender.selected;
-    [_device write:@{@"entity0":@{@"Switch":sender.selected == YES ? @0 :@1},@"cmd":@1}];
+    [_device write:@{@"entity0":@{@"Switch":sender.selected == YES ? @1 :@0},@"cmd":@1}];
     if (sender.selected == YES) {
-        _promptLable.hidden = YES;
-//        _tableView.hidden = YES;
-        _addTimeView.hidden = YES;
-    }else {
         _promptLable.hidden = NO;
-//        _tableView.hidden = NO;
+//        _tableView.hidden = YES;
         _addTimeView.hidden = NO;
+    }else {
+        _promptLable.hidden = YES;
+//        _tableView.hidden = NO;
+        _addTimeView.hidden = YES;
     }
 }
 
@@ -366,16 +366,20 @@
 
     NSLog(@"data == %@",_data);
 //    [((UISwitch *)[self.view viewWithTag:300]) setOn:[_data[@"entity0"][@"Switch"] integerValue] == 1 ?YES:NO animated:YES];
+    
+    // 热水器开
     if ([_data[@"entity0"][@"Switch"] integerValue] == YES) {
         _addTimeView.hidden = NO;
         _promptLable.hidden = NO;
-        ((UIButton *)self.navigationItem.rightBarButtonItem.customView).selected = NO;
-        rightItem.selected = NO;
+        ((UIButton *)self.navigationItem.rightBarButtonItem.customView).selected = YES;
+        rightItem.selected = YES;
+        
+    // 热水器关
     }else {
         _addTimeView.hidden = YES;
         _promptLable.hidden = YES;
-        ((UIButton *)self.navigationItem.rightBarButtonItem.customView).selected = YES;
-        rightItem.selected = YES;
+        ((UIButton *)self.navigationItem.rightBarButtonItem.customView).selected = NO;
+        rightItem.selected = NO;
     }
     
     

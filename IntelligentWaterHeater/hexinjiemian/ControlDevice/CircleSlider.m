@@ -319,17 +319,17 @@
   [centerStr drawInRect:centerStrRect withAttributes:attr];
   
   
-  NSString *boxStr = @"集热器";
-  if (_isWaterBox) {
-    boxStr = @"水箱";
-  }
+  NSString *boxStr = @"水箱";
+//  if (_isWaterBox) {
+//    boxStr = @"水箱";
+//  }
   attr = @{NSForegroundColorAttributeName:[UIColor colorWithWhite:149.0f/255.0f alpha:1.0f], NSFontAttributeName:[UIFont systemFontOfSize:_boxFontSize]};
   CGSize boxStrSize = [boxStr sizeWithAttributes:attr];
   CGRect boxStrRect = [self rectWithCenter:center size:boxStrSize];
   boxStrRect.origin.y = center.y + (_circleOneRadiu + _circleTwoRadiu) / 2.0f - boxStrSize.height / 2.0f;
   
   [boxStr drawInRect:boxStrRect withAttributes:attr];
-  
+  NSLog(@"绘制了水箱或者集热器");
 }
 
 - (CGRect)rectWithRect:(CGRect)rect increase:(CGFloat)inc {
