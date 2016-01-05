@@ -347,8 +347,6 @@
 		04F9F6041AD83A760054AF2D /* IntelligentWaterHeater.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = IntelligentWaterHeater.xcdatamodel; sourceTree = "<group>"; };
 		04F9F60C1AD83A760054AF2D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		04F9F60F1AD83A760054AF2D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		04F9F61A1AD83A760054AF2D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		04F9F61B1AD83A760054AF2D /* IntelligentWaterHeaterTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IntelligentWaterHeaterTests.m; sourceTree = "<group>"; };
 		04F9F62E1AD83D000054AF2D /* Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Header.h; sourceTree = "<group>"; };
 		BE48B0F81B77067D0096B445 /* AsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncUdpSocket.h; sourceTree = "<group>"; };
 		BE48B0F91B77067D0096B445 /* AsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncUdpSocket.m; sourceTree = "<group>"; };
@@ -752,7 +750,6 @@
 				0419E6671ADEC34300445E9E /* SystemConfiguration.framework */,
 				0419E6651ADEC33800445E9E /* libc++.dylib */,
 				04F9F5FB1AD83A760054AF2D /* IntelligentWaterHeater */,
-				04F9F6181AD83A760054AF2D /* IntelligentWaterHeaterTests */,
 				04F9F5FA1AD83A760054AF2D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -790,23 +787,6 @@
 				0419E5E41ADEAA4300445E9E /* PrefixHeader.pch */,
 				04F9F5FD1AD83A760054AF2D /* Info.plist */,
 				04F9F5FE1AD83A760054AF2D /* main.m */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		04F9F6181AD83A760054AF2D /* IntelligentWaterHeaterTests */ = {
-			isa = PBXGroup;
-			children = (
-				04F9F61B1AD83A760054AF2D /* IntelligentWaterHeaterTests.m */,
-				04F9F6191AD83A760054AF2D /* Supporting Files */,
-			);
-			path = IntelligentWaterHeaterTests;
-			sourceTree = "<group>";
-		};
-		04F9F6191AD83A760054AF2D /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				04F9F61A1AD83A760054AF2D /* Info.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
