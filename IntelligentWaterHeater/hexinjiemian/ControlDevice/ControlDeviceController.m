@@ -85,7 +85,7 @@
                 
                 NSInteger time = 4200*100*([weakSelf->_setTimeAndTemView.temLabel.text intValue] - weakSelf->_cirleSilder.value )/(1500*0.98);
                 
-              weakSelf->_addTimeView.switchView.text = [NSString stringWithFormat:@"%@到达%@°",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",[[NSString timeToTurnTimeStamp:date] integerValue] + time]] substringWithRange:NSMakeRange(11, 5)] ,weakSelf->_setTimeAndTemView.temLabel.text];
+              weakSelf->_addTimeView.switchView.text = [NSString stringWithFormat:@"%@到达%@℃",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",[[NSString timeToTurnTimeStamp:date] integerValue] + time]] substringWithRange:NSMakeRange(11, 5)] ,weakSelf->_setTimeAndTemView.temLabel.text];
 //                _promptLable.hidden = NO;
             }else{
 //                _promptLable.hidden = YES;
@@ -97,7 +97,7 @@
             if (weakSelf->_cirleSilder.value < [weakSelf->_setTimeAndTemView.temLabel.text intValue]) {
                 
                 NSInteger time = 4200*100*([weakSelf->_setTimeAndTemView.temLabel.text intValue] - weakSelf->_cirleSilder.value )/(1500*0.98);
-                weakSelf->_addTimeView.switchView1.text = [NSString stringWithFormat:@"%@到达%@°",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",[[NSString timeToTurnTimeStamp:date] integerValue] + time]] substringWithRange:NSMakeRange(11, 5)] ,weakSelf->_setTimeAndTemView.temLabel.text];
+                weakSelf->_addTimeView.switchView1.text = [NSString stringWithFormat:@"%@到达%@℃",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",[[NSString timeToTurnTimeStamp:date] integerValue] + time]] substringWithRange:NSMakeRange(11, 5)] ,weakSelf->_setTimeAndTemView.temLabel.text];
                 //                _promptLable.hidden = NO;
             }else{
                 //                _promptLable.hidden = YES;
@@ -109,7 +109,7 @@
             if (weakSelf->_cirleSilder.value < [weakSelf->_setTimeAndTemView.temLabel.text intValue]) {
                 
                 NSInteger time = 4200*100*([weakSelf->_setTimeAndTemView.temLabel.text intValue] - weakSelf->_cirleSilder.value )/(1500*0.98);
-                weakSelf->_addTimeView.switchView2.text = [NSString stringWithFormat:@"%@到达%@°",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",[[NSString timeToTurnTimeStamp:date] integerValue] + time]] substringWithRange:NSMakeRange(11, 5)] ,weakSelf->_setTimeAndTemView.temLabel.text];
+                weakSelf->_addTimeView.switchView2.text = [NSString stringWithFormat:@"%@到达%@℃",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",[[NSString timeToTurnTimeStamp:date] integerValue] + time]] substringWithRange:NSMakeRange(11, 5)] ,weakSelf->_setTimeAndTemView.temLabel.text];
                 //                _promptLable.hidden = NO;
             }else{
                 //                _promptLable.hidden = YES;
@@ -394,7 +394,7 @@
     if (_cirleSilder.sliderValue > _cirleSilder.value) {
         NSInteger time = 4200*100*(_cirleSilder.sliderValue - _cirleSilder.value)/(1500*0.98);
         
-        _promptLable.text = [NSString stringWithFormat:@"预计%@到达%@°",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",[[NSString timeToTurnTimeStamp:[NSDate date]] integerValue] + time]] substringWithRange:NSMakeRange(11, 5)] ,_deviceInfo[@"Temp_electric_heating"]];
+        _promptLable.text = [NSString stringWithFormat:@"预计%@到达%@℃",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",[[NSString timeToTurnTimeStamp:[NSDate date]] integerValue] + time]] substringWithRange:NSMakeRange(11, 5)] ,_deviceInfo[@"Temp_electric_heating"]];
         _promptLable.hidden = NO;
     }else{
         _promptLable.hidden = YES;
@@ -404,7 +404,7 @@
         
         NSInteger time = 4200*100*([_deviceInfo[@"Time_appointment_Temp1"] intValue] - [_deviceInfo[@"Tank_temp"] integerValue] )/(1500*0.98) + [_deviceInfo[@"Time_appointment_hour1"] integerValue]*3600 +[_deviceInfo[@"Time_appointment_minute1"] integerValue]*60 ;
         
-        _addTimeView.switchView.text = [NSString stringWithFormat:@"%@到达%@°",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",time- 8*3600]] substringWithRange:NSMakeRange(11, 5)] ,_deviceInfo[@"Time_appointment_Temp1"]];
+        _addTimeView.switchView.text = [NSString stringWithFormat:@"%@到达%@℃",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",time- 8*3600]] substringWithRange:NSMakeRange(11, 5)] ,_deviceInfo[@"Time_appointment_Temp1"]];
         //                _promptLable.hidden = NO;
     }else{
         //                _promptLable.hidden = YES;
@@ -415,7 +415,7 @@
         
         NSInteger time = 4200*100*([_deviceInfo[@"Time_appointment_Temp2"] intValue] - [_deviceInfo[@"Tank_temp"] integerValue] )/(1500*0.98) + [_deviceInfo[@"Time_appointment_hour2"] integerValue]*3600 +[_deviceInfo[@"Time_appointment_minute2"] integerValue]*60 ;
         
-        _addTimeView.switchView1.text = [NSString stringWithFormat:@"%@到达%@°",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",time- 8*3600]] substringWithRange:NSMakeRange(11, 5)] ,_deviceInfo[@"Time_appointment_Temp2"]];
+        _addTimeView.switchView1.text = [NSString stringWithFormat:@"%@到达%@℃",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",time- 8*3600]] substringWithRange:NSMakeRange(11, 5)] ,_deviceInfo[@"Time_appointment_Temp2"]];
         //                _promptLable.hidden = NO;
     }else{
         //                _promptLable.hidden = YES;
@@ -425,7 +425,7 @@
         
         NSInteger time = 4200*100*([_deviceInfo[@"Time_appointment_Temp3"] intValue] - [_deviceInfo[@"Tank_temp"] integerValue] )/(1500*0.98) + [_deviceInfo[@"Time_appointment_hour3"] integerValue]*3600 +[_deviceInfo[@"Time_appointment_minute3"] integerValue]*60 ;
         
-        _addTimeView.switchView2.text = [NSString stringWithFormat:@"%@到达%@°",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",time - 8*3600]] substringWithRange:NSMakeRange(11, 5)] ,_deviceInfo[@"Time_appointment_Temp3"]];
+        _addTimeView.switchView2.text = [NSString stringWithFormat:@"%@到达%@℃",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",time - 8*3600]] substringWithRange:NSMakeRange(11, 5)] ,_deviceInfo[@"Time_appointment_Temp3"]];
         //                _promptLable.hidden = NO;
     }else{
         //                _promptLable.hidden = YES;

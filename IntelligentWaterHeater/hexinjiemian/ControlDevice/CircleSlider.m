@@ -283,12 +283,14 @@
     
   }
 
-  
+  // 获取小圆圈的坐标
   CGFloat fc = _circleOneRadiu * cosf(_graduationBeginRadians + (_sliderValue - 20) * _radiansPerGraduation);
   CGFloat fs = _circleOneRadiu * sinf(_graduationBeginRadians + (_sliderValue - 20) * _radiansPerGraduation);
   CGPoint markPoint = CGPointMake(fc + center.x, fs + center.y);
+  // 获取小圆圈的绘制区域
   CGRect markRect = CGRectMake(markPoint.x - _markCircleRadiu, markPoint.y - _markCircleRadiu, _markCircleRadiu * 2, _markCircleRadiu * 2);
   
+  // 设置小圆圈的背景颜色
   if (_sliderValue > _value) {
     CGContextSetStrokeColorWithColor(context, strokeColor.CGColor);
     CGContextSetFillColorWithColor(context, fillColor.CGColor);
@@ -299,7 +301,7 @@
     CGContextAddEllipseInRect(context, markRect);
     CGContextDrawPath(context, kCGPathFillStroke);
   }
-  NSString *markStr = [NSString stringWithFormat:@"%d°", _sliderValue];
+  NSString *markStr = [NSString stringWithFormat:@"%d", _sliderValue];
   
   NSDictionary *attr;
   if (_sliderValue > _value) {

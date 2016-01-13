@@ -38,7 +38,7 @@
         _accountTextField = [[UITextField alloc] init];
         _accountTextField.frame = CGRectMake(0.2*mScreen.width, 30, 0.7*mScreen.width, 30);
         _accountTextField.placeholder = @"手机号、邮箱或者ID号";
-//        _accountTextField.text = @"18728443672";
+        _accountTextField.text = @"18728443672";
         _accountTextField.delegate = self;
         _accountTextField.font = [UIFont systemFontOfSize:16];
         [_accountTextField setReturnKeyType:UIReturnKeyNext];
@@ -63,7 +63,7 @@
         _passwordTextField.frame = CGRectMake(0.2*mScreen.width, CGRectGetMaxY(_accountTextField.frame)+10, 0.7*mScreen.width, 30);
         _passwordTextField.placeholder = @"输入登录密码";
         _passwordTextField.delegate = self;
-//        _passwordTextField.text = @"Li8728428850";
+        _passwordTextField.text = @"Li8728428850";
         _passwordTextField.font = [UIFont systemFontOfSize:16];
         _passwordTextField.secureTextEntry = YES;
         [_passwordTextField setReturnKeyType:(UIReturnKeyGo)];
