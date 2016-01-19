@@ -26,6 +26,7 @@
     UIButton * rightItem;
     CircleSlider * _cirleSilder;
     NSDictionary * _deviceInfo;
+    int tankTemp;
 }
 @property (nonatomic, strong) MenuView * menuView;
 @property (nonatomic, strong) SetTimeAndTemView * setTimeAndTemView;
@@ -374,12 +375,16 @@
         ((UIButton *)self.navigationItem.rightBarButtonItem.customView).selected = YES;
         rightItem.selected = YES;
         
+        _cirleSilder.isToDraw = YES;
+        
     // 热水器关
     }else {
         _addTimeView.hidden = YES;
         _promptLable.hidden = YES;
         ((UIButton *)self.navigationItem.rightBarButtonItem.customView).selected = NO;
         rightItem.selected = NO;
+        
+        _cirleSilder.isToDraw = NO;
     }
     
     
@@ -394,7 +399,7 @@
     if (_cirleSilder.sliderValue > _cirleSilder.value) {
         NSInteger time = 4200*100*(_cirleSilder.sliderValue - _cirleSilder.value)/(1500*0.98);
         
-        _promptLable.text = [NSString stringWithFormat:@"预计%@到达%@℃",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",[[NSString timeToTurnTimeStamp:[NSDate date]] integerValue] + time]] substringWithRange:NSMakeRange(11, 5)] ,_deviceInfo[@"Temp_electric_heating"]];
+        _promptLable.text = [NSString stringWithFormat:@"预计%@到达%@℃",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%d",[[NSString timeToTurnTimeStamp:[NSDate date]] integerValue] + time]] substringWithRange:NSMakeRange(11, 5)] ,_deviceInfo[@"Temp_electric_heating"]];
         _promptLable.hidden = NO;
     }else{
         _promptLable.hidden = YES;
@@ -447,7 +452,7 @@
         _addTimeView.addBtn2.hidden = YES;
     }
 
-
+    
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"DeviceData" object:nil userInfo:_data];
     NSLog(@"result == %d",result);
@@ -457,6 +462,17 @@
 -(void)onTouchEnd:(CircleSlider *)circleSlider{
     NSLog(@"调用了onTouchEnd()函数");
     [_device write:@{@"entity0":@{@"Temp_electric_heating":@(circleSlider.sliderValue)},@"cmd":@1}];
+    // 设置预计到达时间是否显示
+    NSLog(@"sliderValue的值是：%d",circleSlider.sliderValue);
+
+    if (_cirleSilder.sliderValue > _cirleSilder.value) {
+        NSInteger time = 4200*100*(_cirleSilder.sliderValue - _cirleSilder.value)/(1500*0.98);
+        
+        _promptLable.text = [NSString stringWithFormat:@"预计%@到达%d℃",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%d",[[NSString timeToTurnTimeStamp:[NSDate date]] integerValue] + time]] substringWithRange:NSMakeRange(11, 5)] ,circleSlider.sliderValue];
+        _promptLable.hidden = NO;
+    }else{
+        _promptLable.hidden = YES;
+    }
 }
 
 #pragma mark -- slider delegate

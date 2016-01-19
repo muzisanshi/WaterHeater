@@ -27,4 +27,6 @@
 @property (nonatomic, assign) BOOL isWaterBox;
 @property (nonatomic, assign) BOOL isShowColorfulGraduation;
 
+@property BOOL isToDraw;
+
 @end

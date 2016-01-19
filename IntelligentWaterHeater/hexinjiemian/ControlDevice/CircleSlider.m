@@ -53,14 +53,13 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
   self = [super initWithFrame:frame];
-  
+  self.isToDraw = YES;
   [self awakeFromNib];
-  
   return self;
 }
 
 - (void)awakeFromNib {
-  
+    NSLog(@"调用了awakeFromNib()函数");
   _progressLayer = [CAShapeLayer layer];
   _progressLayer.frame = self.bounds;
   _progressLayer.fillColor =  [[UIColor clearColor] CGColor];
@@ -108,6 +107,7 @@
 }
 
 - (void)setSliderValue:(int)sliderValue {
+    NSLog(@"调用了setSliderValue()函数");
   if (sliderValue < 20) {
     _sliderValue = 20;
   } else if (sliderValue > 80) {
@@ -176,7 +176,7 @@
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
 - (void)drawRect:(CGRect)rect {
-  
+    NSLog(@"调用了drawRect函数");
   //℃
   //°
   CGPoint center = CGPointMake(self.bounds.size.width / 2.0f, self.bounds.size.height / 2.0f);
@@ -282,26 +282,6 @@
     CGContextDrawPath(context, kCGPathStroke);
     
   }
-
-  // 获取小圆圈的坐标
-  CGFloat fc = _circleOneRadiu * cosf(_graduationBeginRadians + (_sliderValue - 20) * _radiansPerGraduation);
-  CGFloat fs = _circleOneRadiu * sinf(_graduationBeginRadians + (_sliderValue - 20) * _radiansPerGraduation);
-  CGPoint markPoint = CGPointMake(fc + center.x, fs + center.y);
-  // 获取小圆圈的绘制区域
-  CGRect markRect = CGRectMake(markPoint.x - _markCircleRadiu, markPoint.y - _markCircleRadiu, _markCircleRadiu * 2, _markCircleRadiu * 2);
-  
-  // 设置小圆圈的背景颜色
-  if (_sliderValue > _value) {
-    CGContextSetStrokeColorWithColor(context, strokeColor.CGColor);
-    CGContextSetFillColorWithColor(context, fillColor.CGColor);
-    CGContextAddEllipseInRect(context, markRect);
-    CGContextDrawPath(context, kCGPathFill);
-  } else {
-    CGContextSetStrokeColorWithColor(context, strokeColor.CGColor);
-    CGContextAddEllipseInRect(context, markRect);
-    CGContextDrawPath(context, kCGPathFillStroke);
-  }
-  NSString *markStr = [NSString stringWithFormat:@"%d", _sliderValue];
   
   NSDictionary *attr;
   if (_sliderValue > _value) {
@@ -309,10 +289,35 @@
   } else {
     attr = @{NSForegroundColorAttributeName:[UIColor colorWithWhite:100.0f/255.0f alpha:1.0f], NSFontAttributeName:[UIFont systemFontOfSize:_markFontSize]};
   }
-  CGSize markSize = [markStr sizeWithAttributes:attr];
-  markRect = CGRectMake(markPoint.x - markSize.width / 2.0f, markPoint.y - markSize.height / 2.0f, markSize.width, markSize.height);
-  
-  [markStr drawInRect:markRect withAttributes:attr];
+    
+  if (self.isToDraw) {
+        
+    // 获取小圆圈的坐标
+    CGFloat fc = _circleOneRadiu * cosf(_graduationBeginRadians + (_sliderValue - 20) * _radiansPerGraduation);
+    CGFloat fs = _circleOneRadiu * sinf(_graduationBeginRadians + (_sliderValue - 20) * _radiansPerGraduation);
+    CGPoint markPoint = CGPointMake(fc + center.x, fs + center.y);
+    // 获取小圆圈的绘制区域
+    CGRect markRect = CGRectMake(markPoint.x - _markCircleRadiu, markPoint.y - _markCircleRadiu, _markCircleRadiu * 2, _markCircleRadiu * 2);
+    // 设置小圆圈的背景颜色
+    if (_sliderValue > _value) {
+        CGContextSetStrokeColorWithColor(context, strokeColor.CGColor);
+        CGContextSetFillColorWithColor(context, fillColor.CGColor);
+        CGContextAddEllipseInRect(context, markRect);
+        // 绘制小圆圈
+        CGContextDrawPath(context, kCGPathFill);
+    } else {
+        CGContextSetStrokeColorWithColor(context, strokeColor.CGColor);
+        CGContextAddEllipseInRect(context, markRect);
+        // 绘制小圆圈
+        CGContextDrawPath(context, kCGPathFillStroke);
+    }
+    NSString *markStr = [NSString stringWithFormat:@"%d", _sliderValue];
+    CGSize markSize = [markStr sizeWithAttributes:attr];
+    markRect = CGRectMake(markPoint.x - markSize.width / 2.0f, markPoint.y - markSize.height / 2.0f, markSize.width, markSize.height);
+    // 在小圆圈中绘制文本
+    [markStr drawInRect:markRect withAttributes:attr];
+  }
+
   
   NSString *centerStr = [NSString stringWithFormat:@"%d℃", _value];
   attr = @{NSForegroundColorAttributeName:[UIColor colorWithWhite:149.0f/255.0f alpha:1.0f], NSFontAttributeName:[UIFont systemFontOfSize:_centerFontSize]};
