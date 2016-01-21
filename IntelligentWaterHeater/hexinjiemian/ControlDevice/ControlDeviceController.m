@@ -24,6 +24,8 @@
     BOOL _isLast;
     NSInteger _row;
     UIButton * rightItem;
+    UIButton * leftItem;
+    UIImageView * imageView;
     CircleSlider * _cirleSilder;
     NSDictionary * _deviceInfo;
     int tankTemp;
@@ -138,6 +140,24 @@
     }
 }
 
+// 处理开关的状态
+-(void)onStateOff{
+    _promptLable.hidden = YES;
+    _addTimeView.hidden = YES;
+    leftItem.hidden = YES;
+    imageView.hidden = YES;
+    _cirleSilder.isToDraw = NO;
+    [_cirleSilder setNeedsDisplay];
+}
+-(void)onStateOn{
+    _promptLable.hidden = NO;
+    _addTimeView.hidden = NO;
+    leftItem.hidden = NO;
+    imageView.hidden = NO;
+    _cirleSilder.isToDraw = YES;
+    [_cirleSilder setNeedsDisplay];
+}
+
 - (void)rightAction
 {
     MoreController * moreVC= [[MoreController alloc] init];
@@ -149,13 +169,9 @@
     sender.selected = !sender.selected;
     [_device write:@{@"entity0":@{@"Switch":sender.selected == YES ? @1 :@0},@"cmd":@1}];
     if (sender.selected == YES) {
-        _promptLable.hidden = NO;
-//        _tableView.hidden = YES;
-        _addTimeView.hidden = NO;
+        [self onStateOn];
     }else {
-        _promptLable.hidden = YES;
-//        _tableView.hidden = NO;
-        _addTimeView.hidden = YES;
+        [self onStateOff];
     }
 }
 
@@ -177,7 +193,7 @@
 - (void)initUserInterface
 {
     
-    UIButton * leftItem = [[UIButton alloc] initWithFrame:CGRectMake(30, 25, 40, 40)];
+    leftItem = [[UIButton alloc] initWithFrame:CGRectMake(30, 25, 40, 40)];
     [leftItem setImage:[UIImage imageNamed:@"zhuti1.png"] forState:(UIControlStateNormal)];
     [leftItem setImage:[UIImage imageNamed:@"zhuti.png"] forState:(UIControlStateHighlighted)];
     [leftItem addTarget:self action:@selector(leftAction) forControlEvents:(UIControlEventTouchUpInside)];
@@ -190,7 +206,7 @@
     [self.view addSubview:rightItem];
 
     
-    UIImageView * imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0 , 125, 24)];
+    imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0 , 125, 24)];
     imageView.center = CGPointMake(mScreen.width/2, 45);
     imageView.image = [UIImage imageNamed:@"logoguang.png"];
     [self.view addSubview:imageView];
@@ -198,11 +214,8 @@
     _promptLable = [[UILabel alloc] initWithFrame:CGRectMake(30, 10+64, mScreen.width - 60, 40)];
     _promptLable.textColor = [UIColor grayColor];
     _promptLable.textAlignment = NSTextAlignmentCenter;
-//    _promptLable.text = @"预计明天05:33到达89°";
     _promptLable.hidden = YES;
     [self.view addSubview:_promptLable];
-    
-    
     
     // 初始化温度控件
     _cirleSilder = [[CircleSlider alloc] initWithFrame:CGRectMake(25, CGRectGetMaxY(_promptLable.frame), mScreen.width-50, mScreen.width-50)];
@@ -211,8 +224,7 @@
     _cirleSilder.isShowColorfulGraduation = NO;
     [self.view addSubview:_cirleSilder];
     
-    
-
+    // 初始化定时器视图
     __unsafe_unretained typeof(self) selfBlock = self;
     _addTimeView = [[AddTimeView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_cirleSilder.frame), mScreen.width, mScreen.height -CGRectGetMaxY(_cirleSilder.frame)-20 )];
     _addTimeView.setTemBlock = ^{
@@ -350,11 +362,13 @@
     ((UILabel *)[self.view viewWithTag:40]).text = [[NSString stringWithFormat:@"%@",[[NSDate date] dateByAddingTimeInterval:3600*8]] substringWithRange:NSMakeRange(11, 8)];
 }
 
+
 - (BOOL)XPGWifiDevice:(XPGWifiDevice *)device didReceiveData:(NSDictionary *)data result:(int)result;
 {
-    NSLog(@"收到了机智云返回的数据");
-    //基本数据，与发送的数据格式⼀一致
+    NSLog(@"调用了didReceiveData()函数");
+    //基本数据
     NSDictionary *_data = [data valueForKey:@"data"];
+    NSLog(@"data == %@",_data);
         
     //警告
     NSArray *alarms = [data valueForKey:@"alarms"];
@@ -364,78 +378,50 @@
     
     //透传数据
     NSDictionary *binary = [data valueForKey:@"binary"];
-
-    NSLog(@"data == %@",_data);
-//    [((UISwitch *)[self.view viewWithTag:300]) setOn:[_data[@"entity0"][@"Switch"] integerValue] == 1 ?YES:NO animated:YES];
     
-    // 热水器开
-    if ([_data[@"entity0"][@"Switch"] integerValue] == YES) {
-        _addTimeView.hidden = NO;
-        _promptLable.hidden = NO;
-        ((UIButton *)self.navigationItem.rightBarButtonItem.customView).selected = YES;
-        rightItem.selected = YES;
-        
-        _cirleSilder.isToDraw = YES;
-        
-    // 热水器关
-    }else {
-        _addTimeView.hidden = YES;
-        _promptLable.hidden = YES;
-        ((UIButton *)self.navigationItem.rightBarButtonItem.customView).selected = NO;
-        rightItem.selected = NO;
-        
-        _cirleSilder.isToDraw = NO;
-    }
-    
-    
-    ((NSString *)_data[@"entity0"][@"Time1close_minutes"]).length ==1?[NSString stringWithFormat:@"0%@",_data[@"entity0"][@"Time1close_minutes"]]: _data[@"entity0"][@"Time1close_minutes"];
-    
-//    if ([_data[@"cmd"] integerValue] == 3) {
+    // 获取设备的数据点
     _deviceInfo = _data[@"entity0"];
     _cirleSilder.value = [_deviceInfo[@"Tank_temp"] intValue];
-    _cirleSilder.sliderValue = [_deviceInfo[@"Temp_electric_heating"] intValue] ;
-
+    _cirleSilder.sliderValue = [_deviceInfo[@"Temp_electric_heating"] intValue];
     
+    // 设置到达时间
     if (_cirleSilder.sliderValue > _cirleSilder.value) {
         NSInteger time = 4200*100*(_cirleSilder.sliderValue - _cirleSilder.value)/(1500*0.98);
         
-        _promptLable.text = [NSString stringWithFormat:@"预计%@到达%@℃",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%d",[[NSString timeToTurnTimeStamp:[NSDate date]] integerValue] + time]] substringWithRange:NSMakeRange(11, 5)] ,_deviceInfo[@"Temp_electric_heating"]];
+        _promptLable.text = [NSString stringWithFormat:@"预计%@到达%@℃",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",[[NSString timeToTurnTimeStamp:[NSDate date]] integerValue] + time]] substringWithRange:NSMakeRange(11, 5)] ,_deviceInfo[@"Temp_electric_heating"]];
         _promptLable.hidden = NO;
     }else{
         _promptLable.hidden = YES;
     }
-
+    
+    
+//    ((NSString *)_data[@"entity0"][@"Time1close_minutes"]).length == 1 ? [NSString stringWithFormat:@"0%@",_data[@"entity0"][@"Time1close_minutes"]]: _data[@"entity0"][@"Time1close_minutes"];
+    
+    // 设置定时器1
     if ([_deviceInfo[@"Time_appointment_Temp1"] integerValue] > [_deviceInfo[@"Tank_temp"] integerValue]) {
         
         NSInteger time = 4200*100*([_deviceInfo[@"Time_appointment_Temp1"] intValue] - [_deviceInfo[@"Tank_temp"] integerValue] )/(1500*0.98) + [_deviceInfo[@"Time_appointment_hour1"] integerValue]*3600 +[_deviceInfo[@"Time_appointment_minute1"] integerValue]*60 ;
         
         _addTimeView.switchView.text = [NSString stringWithFormat:@"%@到达%@℃",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",time- 8*3600]] substringWithRange:NSMakeRange(11, 5)] ,_deviceInfo[@"Time_appointment_Temp1"]];
-        //                _promptLable.hidden = NO;
-    }else{
-        //                _promptLable.hidden = YES;
     }
 
-    
+    // 设置定时器2
     if ([_deviceInfo[@"Time_appointment_Temp2"] integerValue] > [_deviceInfo[@"Tank_temp"] integerValue]) {
         
         NSInteger time = 4200*100*([_deviceInfo[@"Time_appointment_Temp2"] intValue] - [_deviceInfo[@"Tank_temp"] integerValue] )/(1500*0.98) + [_deviceInfo[@"Time_appointment_hour2"] integerValue]*3600 +[_deviceInfo[@"Time_appointment_minute2"] integerValue]*60 ;
         
         _addTimeView.switchView1.text = [NSString stringWithFormat:@"%@到达%@℃",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",time- 8*3600]] substringWithRange:NSMakeRange(11, 5)] ,_deviceInfo[@"Time_appointment_Temp2"]];
-        //                _promptLable.hidden = NO;
-    }else{
-        //                _promptLable.hidden = YES;
     }
     
+    // 设置定时器3
     if ([_deviceInfo[@"Time_appointment_Temp3"] integerValue] > [_deviceInfo[@"Tank_temp"] integerValue]) {
         
         NSInteger time = 4200*100*([_deviceInfo[@"Time_appointment_Temp3"] intValue] - [_deviceInfo[@"Tank_temp"] integerValue] )/(1500*0.98) + [_deviceInfo[@"Time_appointment_hour3"] integerValue]*3600 +[_deviceInfo[@"Time_appointment_minute3"] integerValue]*60 ;
         
         _addTimeView.switchView2.text = [NSString stringWithFormat:@"%@到达%@℃",[[NSString TimeStampStandardTimeWithTimeStamp:[NSString stringWithFormat:@"%ld",time - 8*3600]] substringWithRange:NSMakeRange(11, 5)] ,_deviceInfo[@"Time_appointment_Temp3"]];
-        //                _promptLable.hidden = NO;
-    }else{
-        //                _promptLable.hidden = YES;
     }
     
+    // 设置定时器是否显示
     if ([_deviceInfo[@"Time_of_appointment1"] integerValue] == 1 ) {
         _addTimeView.switchImageView.hidden = NO;
         _addTimeView.addBtn.hidden = YES;
@@ -448,12 +434,32 @@
     }
     if ([_deviceInfo[@"Time_of_appointment3"] integerValue] == 1) {
         _addTimeView.switchImageView2.hidden = NO;
-//        _addTimeView.addBtn.hidden = YES;
+        _addTimeView.addBtn.hidden = YES;
         _addTimeView.addBtn2.hidden = YES;
     }
-
     
+    // 热水器开
+    if ([_data[@"entity0"][@"Switch"] integerValue] == YES) {
+        _addTimeView.hidden = NO;
+        _promptLable.hidden = NO;
+        ((UIButton *)self.navigationItem.rightBarButtonItem.customView).selected = YES;
+        rightItem.selected = YES;
+        
+        _cirleSilder.isToDraw = YES;
+        [_cirleSilder setNeedsDisplay];
+        
+    // 热水器关
+    }else {
+        _addTimeView.hidden = YES;
+        _promptLable.hidden = YES;
+        ((UIButton *)self.navigationItem.rightBarButtonItem.customView).selected = NO;
+        rightItem.selected = NO;
+        
+        _cirleSilder.isToDraw = NO;
+        [_cirleSilder setNeedsDisplay];
+    }
     
+    // 发送通知
     [[NSNotificationCenter defaultCenter] postNotificationName:@"DeviceData" object:nil userInfo:_data];
     NSLog(@"result == %d",result);
     return YES;

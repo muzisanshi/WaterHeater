@@ -289,9 +289,9 @@
   } else {
     attr = @{NSForegroundColorAttributeName:[UIColor colorWithWhite:100.0f/255.0f alpha:1.0f], NSFontAttributeName:[UIFont systemFontOfSize:_markFontSize]};
   }
-    
+  
+  // 判断是否要绘制局部内容，包括小圆圈等
   if (self.isToDraw) {
-        
     // 获取小圆圈的坐标
     CGFloat fc = _circleOneRadiu * cosf(_graduationBeginRadians + (_sliderValue - 20) * _radiansPerGraduation);
     CGFloat fs = _circleOneRadiu * sinf(_graduationBeginRadians + (_sliderValue - 20) * _radiansPerGraduation);
@@ -316,27 +316,32 @@
     markRect = CGRectMake(markPoint.x - markSize.width / 2.0f, markPoint.y - markSize.height / 2.0f, markSize.width, markSize.height);
     // 在小圆圈中绘制文本
     [markStr drawInRect:markRect withAttributes:attr];
+    
+    // 绘制中间显示温度
+    NSString *centerStr = [NSString stringWithFormat:@"%d℃", _value];
+    attr = @{NSForegroundColorAttributeName:[UIColor colorWithWhite:149.0f/255.0f alpha:1.0f], NSFontAttributeName:[UIFont systemFontOfSize:_centerFontSize]};
+    CGSize centerStrSize = [centerStr sizeWithAttributes:attr];
+    CGRect centerStrRect = [self rectWithCenter:center size:centerStrSize];
+    [centerStr drawInRect:centerStrRect withAttributes:attr];
+    
+    // 绘制水箱文本
+    NSString *boxStr = @"水箱";
+    attr = @{NSForegroundColorAttributeName:[UIColor colorWithWhite:149.0f/255.0f alpha:1.0f], NSFontAttributeName:[UIFont systemFontOfSize:_boxFontSize]};
+    CGSize boxStrSize = [boxStr sizeWithAttributes:attr];
+    CGRect boxStrRect = [self rectWithCenter:center size:boxStrSize];
+    boxStrRect.origin.y = center.y + (_circleOneRadiu + _circleTwoRadiu) / 2.0f - boxStrSize.height / 2.0f;
+    
+    [boxStr drawInRect:boxStrRect withAttributes:attr];
+    NSLog(@"绘制了水箱或者集热器");
+      
+  }else{
+      // 在中间绘制开启按钮
+      CGRect centerButRect = [self rectWithCenter:center size:CGSizeMake(100, 100)];
+      self.but = [UIImage imageNamed:@""];
+      self.butView = [[UIImageView alloc] initWithImage:self.but];
+      [self.butView setFrame:centerButRect];
   }
-
-  
-  NSString *centerStr = [NSString stringWithFormat:@"%d℃", _value];
-  attr = @{NSForegroundColorAttributeName:[UIColor colorWithWhite:149.0f/255.0f alpha:1.0f], NSFontAttributeName:[UIFont systemFontOfSize:_centerFontSize]};
-  CGSize centerStrSize = [centerStr sizeWithAttributes:attr];
-  CGRect centerStrRect = [self rectWithCenter:center size:centerStrSize];
-  [centerStr drawInRect:centerStrRect withAttributes:attr];
-  
-  
-  NSString *boxStr = @"水箱";
-//  if (_isWaterBox) {
-//    boxStr = @"水箱";
-//  }
-  attr = @{NSForegroundColorAttributeName:[UIColor colorWithWhite:149.0f/255.0f alpha:1.0f], NSFontAttributeName:[UIFont systemFontOfSize:_boxFontSize]};
-  CGSize boxStrSize = [boxStr sizeWithAttributes:attr];
-  CGRect boxStrRect = [self rectWithCenter:center size:boxStrSize];
-  boxStrRect.origin.y = center.y + (_circleOneRadiu + _circleTwoRadiu) / 2.0f - boxStrSize.height / 2.0f;
-  
-  [boxStr drawInRect:boxStrRect withAttributes:attr];
-  NSLog(@"绘制了水箱或者集热器");
+    
 }
 
 - (CGRect)rectWithRect:(CGRect)rect increase:(CGFloat)inc {

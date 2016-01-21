@@ -27,6 +27,9 @@
 @property (nonatomic, assign) BOOL isWaterBox;
 @property (nonatomic, assign) BOOL isShowColorfulGraduation;
 
+@property UIImage *but;
+@property UIImageView *butView;
+
 @property BOOL isToDraw;
 
 @end

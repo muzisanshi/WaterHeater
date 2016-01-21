@@ -9,4 +9,7 @@
 #import <UIKit/UIKit.h>
 @interface ControlDeviceController : UIViewController<XPGWifiDeviceDelegate,XPGWifiSDKDelegate>
 @property(nonatomic, strong)XPGWifiDevice * device;
+
+-(void)onStateOff;
+-(void)onStateOn;
 @end
