@@ -333,15 +333,33 @@
     
     [boxStr drawInRect:boxStrRect withAttributes:attr];
     NSLog(@"绘制了水箱或者集热器");
-      
-  }else{
-      // 在中间绘制开启按钮
-      CGRect centerButRect = [self rectWithCenter:center size:CGSizeMake(100, 100)];
-      self.but = [UIImage imageNamed:@""];
-      self.butView = [[UIImageView alloc] initWithImage:self.but];
-      [self.butView setFrame:centerButRect];
-  }
     
+    // 隐藏butView
+    if(self.butView){
+        self.butView.hidden = YES;
+    }
+    
+  }else{
+      if(!self.butView){
+          // 在中间绘制开启按钮
+          CGRect centerButRect = [self rectWithCenter:center size:CGSizeMake(70, 70)];
+          self.but = [UIImage imageNamed:@"figure_light_close.png"];
+          self.butView = [[UIButton alloc] initWithFrame:centerButRect];
+          [self.butView setBackgroundImage:self.but forState:UIControlStateNormal]; 
+          // 给按钮添加事件监听
+          [self.butView addTarget:self action:@selector(onClick) forControlEvents:UIControlEventTouchUpInside];
+          [self addSubview:self.butView];
+      }
+      self.butView.hidden = FALSE;
+  }
+}
+
+-(void)onClick{
+    NSLog(@"点击了onClick函数");
+    if (self.conInstance) {
+        [self.conInstance onStateOn];
+        [self.conInstance.device write:@{@"entity0":@{@"Switch":@1},@"cmd":@1}];
+    }
 }
 
 - (CGRect)rectWithRect:(CGRect)rect increase:(CGFloat)inc {

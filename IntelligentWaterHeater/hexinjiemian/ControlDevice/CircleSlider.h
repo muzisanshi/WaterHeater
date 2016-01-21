@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ControlDeviceController.h"
 
 @class CircleSlider;
 
@@ -16,11 +17,13 @@
 - (void)circleSliderValueChanged:(CircleSlider *)circleSlider;
 - (void)circleSliderBoxChanged:(CircleSlider *)circleSlider;
 - (void)onTouchEnd:(CircleSlider *)circleSlider;
+
 @end
 
 @interface CircleSlider : UIView
 
 @property (nonatomic, weak) id<CircleSliderDelegate> delegate;
+@property (nonatomic, weak) ControlDeviceController *conInstance;
 @property (nonatomic, assign) int value;
 @property (nonatomic, assign) int sliderValue;
 
@@ -28,8 +31,9 @@
 @property (nonatomic, assign) BOOL isShowColorfulGraduation;
 
 @property UIImage *but;
-@property UIImageView *butView;
+@property UIButton *butView;
 
 @property BOOL isToDraw;
 
+-(void)onClick;
 @end

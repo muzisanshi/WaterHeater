@@ -145,6 +145,7 @@
     _promptLable.hidden = YES;
     _addTimeView.hidden = YES;
     leftItem.hidden = YES;
+    rightItem.hidden = YES;
     imageView.hidden = YES;
     _cirleSilder.isToDraw = NO;
     [_cirleSilder setNeedsDisplay];
@@ -153,6 +154,7 @@
     _promptLable.hidden = NO;
     _addTimeView.hidden = NO;
     leftItem.hidden = NO;
+    rightItem.hidden = NO;
     imageView.hidden = NO;
     _cirleSilder.isToDraw = YES;
     [_cirleSilder setNeedsDisplay];
@@ -220,6 +222,7 @@
     // 初始化温度控件
     _cirleSilder = [[CircleSlider alloc] initWithFrame:CGRectMake(25, CGRectGetMaxY(_promptLable.frame), mScreen.width-50, mScreen.width-50)];
     _cirleSilder.delegate = self;
+    _cirleSilder.conInstance = self;
     _cirleSilder.backgroundColor = [UIColor clearColor];
     _cirleSilder.isShowColorfulGraduation = NO;
     [self.view addSubview:_cirleSilder];
